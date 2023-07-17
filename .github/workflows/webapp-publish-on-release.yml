@@ -13,18 +13,18 @@ jobs:
     steps:
       - name: Checkout the repo # (callout-1)
         uses: actions/checkout@v2
-      - name: Build image # (callout-2)
-        run: docker build -t sample/my-page .
-      - name: Install doctl # (callout-3)
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Log in to DO Container Registry # (callout-4)
-        run: doctl registry login --expiry-seconds 60000
-      - name: Tag image # (callout-5)
-        run: docker tag sample/my-page registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
-      - name: Push image to DO Container Registry # (callout-6)
-        run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+      # - name: Build image # (callout-2)
+      #   run: docker build -t sample/my-page .
+      # - name: Install doctl # (callout-3)
+      #   uses: digitalocean/action-doctl@v2
+      #   with:
+      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      # - name: Log in to DO Container Registry # (callout-4)
+      #   run: doctl registry login --expiry-seconds 60000
+      # - name: Tag image # (callout-5)
+      #   run: docker tag sample/my-page registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+      # - name: Push image to DO Container Registry # (callout-6)
+      #   run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
       - name: Generate file
         run: |
           cat << EOF > new_file.txt
