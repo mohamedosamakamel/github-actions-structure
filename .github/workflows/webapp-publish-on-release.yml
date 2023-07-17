@@ -27,7 +27,7 @@ jobs:
       #   run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
       - name: Generate file
         run: |
-          cat << EOF > new_file.txt
+          cat << EOF > new_file.json
           apiVersion: apps/v1
           kind: Deployment
           metadata:
@@ -48,7 +48,7 @@ jobs:
               spec:
                 containers:
                   - name: backend
-                    image: registry.digitalocean.com/remah/be:v22
+                    image: registry.digitalocean.com/remah/be:${{github.event.inputs.version }}
                     readinessProbe:
                       periodSeconds: 100
                       httpGet:
