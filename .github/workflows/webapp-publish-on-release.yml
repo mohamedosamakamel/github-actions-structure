@@ -38,4 +38,4 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add new_file.txt
           git commit -m "Add new file"
-          git push
+          git push --force
