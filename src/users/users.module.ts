@@ -12,7 +12,7 @@ import { Student, StudentSchema } from './models/student.model';
 import { Teacher, TeacherSchema } from './models/teacher.model';
 import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
-import { MulterModule } from '@nestjs/platform-express';
+import { MulterModule } from '@nestjs/platform-express'; 
 import { UploadCloudinary } from 'src/utils/services/upload-cloudinary';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserRepository } from './users.repository';

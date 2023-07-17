@@ -34,14 +34,9 @@ WORKDIR /user/src/app
 COPY --from=install-dependencies /user/src/app/node_modules ./node_modules
 COPY --from=create-build /user/src/app/dist ./dist
 COPY package.json ./
-
-ENV TINI_VERSION v0.19.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
-RUN apk add --no-cache tini
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["node", "dist/main"]
  
+CMD ["npm", "run", "start:prod"]
+
 
 # FROM node:14-alpine3.14 as builder
 
