@@ -21,6 +21,8 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - name: Log in to DO Container Registry # (callout-4)
         run: doctl registry login --expiry-seconds 60000
+      - name: Log in to Kubernetes # (callout-4)
+        run: doctl kubernetes cluster kubeconfig save 67e51d62-cd39-456c-8725-bfaec311577e
       - name: testing kubectl
         run:  kubectl get all  
       # - name: Tag image # (callout-5)
