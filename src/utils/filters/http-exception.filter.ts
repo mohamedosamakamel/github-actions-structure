@@ -21,7 +21,7 @@ export class AllExceptionsFilter<T extends HttpException>
      */
     const responseMessage = (type, message, statusCode, errorObject = null) => {
       response.status(statusCode).json({
-        remah:'remah',
+        remah:'latos is here',
         statusCode,
         path: request.url,
         errorType: type,
