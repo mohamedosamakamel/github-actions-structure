@@ -3,39 +3,66 @@ kind: Deployment
 metadata:
   name: backend
   labels:
-    app: backend
+    app: be
 spec:
-  replicas: 1
+  replicas: 2
   minReadySeconds: 10
-  selector: 
+  selector:
     matchLabels:
       lbtype: external
   template:
     metadata:
       labels:
         lbtype: external
-        app: backend
+        app: be
     spec:
       containers:
         - name: backend
-          image: registry.digitalocean.com/remah/be:v22
+          image: registry.digitalocean.com/kubernetes-github-actions/my-sample-page:1
           readinessProbe:
             periodSeconds: 100
             httpGet:
               path: /health
-              port: 3001
+              port: 80
           livenessProbe:
             httpGet:
               path: /health
-              port: 3001
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 2
           resources:
             requests:
               cpu: 50m
           ports:
-          - containerPort: 3001
-            name: "3001-port"
+            - containerPort: 80
+              name: '3001-port'
           envFrom:
-          - configMapRef: 
-              name: back-store-env
+            - configMapRef:
+                name: back-store-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lato-remah-world-service
+spec:
+  selector:
+    app: be
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: remah-world-service
+spec:
+  selector:
+    app: be
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

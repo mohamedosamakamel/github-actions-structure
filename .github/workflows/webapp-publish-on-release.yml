@@ -13,67 +13,69 @@ jobs:
     steps:
       - name: Checkout the repo # (callout-1)
         uses: actions/checkout@v2
-      # - name: Build image # (callout-2)
-      #   run: docker build -t sample/my-page .
-      # - name: Install doctl # (callout-3)
-      #   uses: digitalocean/action-doctl@v2
-      #   with:
-      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      # - name: Log in to DO Container Registry # (callout-4)
-      #   run: doctl registry login --expiry-seconds 60000
+      - name: Build image # (callout-2)
+        run: docker build -t sample/my-page .
+      - name: Install doctl # (callout-3)
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DO Container Registry # (callout-4)
+        run: doctl registry login --expiry-seconds 60000
+      - name: testing kubectl
+        run:  kubectl get all  
       # - name: Tag image # (callout-5)
       #   run: docker tag sample/my-page registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
       # - name: Push image to DO Container Registry # (callout-6)
       #   run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
-      - name: Generate file
-        run: |
-          cat << EOF > new_file.json
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: backend
-            labels:
-              app: backend
-          spec:
-            replicas: 1
-            minReadySeconds: 10
-            selector: 
-              matchLabels:
-                lbtype: external
-            template:
-              metadata:
-                labels:
-                  lbtype: external
-                  app: backend
-              spec:
-                containers:
-                  - name: backend
-                    image: registry.digitalocean.com/remah/be:${{github.event.inputs.version }}
-                    readinessProbe:
-                      periodSeconds: 100
-                      httpGet:
-                        path: /health
-                        port: 3001
-                    livenessProbe:
-                      httpGet:
-                        path: /health
-                        port: 3001
-                      initialDelaySeconds: 5
-                      periodSeconds: 2
-                    resources:
-                      requests:
-                        cpu: 50m
-                    ports:
-                    - containerPort: 3001
-                      name: "3001-port"
-                    envFrom:
-                    - configMapRef: 
-                        name: back-store-env
-          EOF
-      - name: Add file to repository
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add new_file.json
-          git commit -m "Add new file"
-          git push --force
+      # - name: Generate file
+      #    run: |
+      #     cat << EOF > new_file.yaml
+      #     apiVersion: apps/v1
+      #     kind: Deployment
+      #     metadata:
+      #       name: backend
+      #       labels:
+      #         app: backend
+      #     spec:
+      #       replicas: 1
+      #       minReadySeconds: 10
+      #       selector:
+      #         matchLabels:
+      #           lbtype: external
+      #       template:
+      #         metadata:
+      #           labels:
+      #             lbtype: external
+      #             app: backend
+      #         spec:
+      #           containers:
+      #             - name: backend
+      #               image:registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+      #               readinessProbe:
+      #                 periodSeconds: 100
+      #                 httpGet:
+      #                   path: /health
+      #                   port: 3001
+      #               livenessProbe:
+      #                 httpGet:
+      #                   path: /health
+      #                   port: 3001
+      #                 initialDelaySeconds: 5
+      #                 periodSeconds: 2
+      #               resources:
+      #                 requests:
+      #                   cpu: 50m
+      #               ports:
+      #               - containerPort: 3001
+      #                 name: "3001-port"
+      #               envFrom:
+      #               - configMapRef:
+      #                   name: back-store-env
+      #     EOF
+      # - name: Add file to repository
+      #   run: |
+      #     git config --local user.email "actions@github.com"
+      #     git config --local user.name "GitHub Actions"
+      #     git add new_file.yaml
+      #     git commit -m "Add new file"
+      #     git push --force
