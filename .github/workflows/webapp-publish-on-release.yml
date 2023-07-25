@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build image # (callout-2)
         run: docker build -t sample/my-page .
+
       - name: Install doctl # (callout-3)
         uses: digitalocean/action-doctl@v2
         with:
@@ -31,56 +32,37 @@ jobs:
         run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
       - name: apply the new image
         run: kubectl set image deployment/remah-world-deployment nginx-hello=registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
-
-        # - name: Generate file
-      #    run: |
-      #     cat << EOF > new_file.yaml
-      #     apiVersion: apps/v1
-      #     kind: Deployment
-      #     metadata:
-      #       name: backend
-      #       labels:
-      #         app: backend
-      #     spec:
-      #       replicas: 1
-      #       minReadySeconds: 10
-      #       selector:
-      #         matchLabels:
-      #           lbtype: external
-      #       template:
-      #         metadata:
-      #           labels:
-      #             lbtype: external
-      #             app: backend
-      #         spec:
-      #           containers:
-      #             - name: backend
-      #               image:registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
-      #               readinessProbe:
-      #                 periodSeconds: 100
-      #                 httpGet:
-      #                   path: /health
-      #                   port: 3001
-      #               livenessProbe:
-      #                 httpGet:
-      #                   path: /health
-      #                   port: 3001
-      #                 initialDelaySeconds: 5
-      #                 periodSeconds: 2
-      #               resources:
-      #                 requests:
-      #                   cpu: 50m
-      #               ports:
-      #               - containerPort: 3001
-      #                 name: "3001-port"
-      #               envFrom:
-      #               - configMapRef:
-      #                   name: back-store-env
-      #     EOF
-      # - name: Add file to repository
-      #   run: |
-      #     git config --local user.email "actions@github.com"
-      #     git config --local user.name "GitHub Actions"
-      #     git add new_file.yaml
-      #     git commit -m "Add new file"
-      #     git push --force
+  Send_Slack:
+    name: Send To Slack
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+      - id: slack
+        name: Send to Slack
+        uses: slackapi/slack-github-action@v1.21.0
+        with:
+          channel-id: 'C04DKA10V24'
+          payload: |
+            {
+              "type": "section",
+              "text": {
+                "type": "plain_text",
+                "text": "A new Release has just Deployed ::rocket::rocket::rocket::rocket::rocket::rocket:",
+                "emoji": true
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "plain_text",
+                "text": "Our Domain is : https://remah.world",
+                "emoji": true
+              }
+            },
+            {
+              "type": "image",
+              "image_url": "https://www.pngall.com/wp-content/uploads/2016/04/Hosting-PNG-Images.png",
+              "alt_text": "inspiration"
+              }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN}}
