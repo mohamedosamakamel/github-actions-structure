@@ -16,7 +16,7 @@ jobs:
         name: Send to Slack
         uses: slackapi/slack-github-action@v1.21.0
         with:
-          channel-id: 'C04DKA10V24'
+          channel-id: 'D05FWNE4HU4'
           payload: |
             {
             "blocks": [
