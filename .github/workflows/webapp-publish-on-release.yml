@@ -19,25 +19,29 @@ jobs:
           channel-id: 'C04DKA10V24'
           payload: |
             {
-              "type": "section",
-              "text": {
-                "type": "plain_text",
-                "text": "A new Release has just Deployed ::rocket::rocket::rocket::rocket::rocket::rocket:",
-                "emoji": true
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "plain_text",
+                  "text": "A new Release has just Deployed ::rocket::rocket::rocket::rocket::rocket::rocket:",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "plain_text",
+                  "text": "Our Domain is : https://remah.world",
+                  "emoji": true
+                }
+              },
+              {
+                "type": "image",
+                "image_url": "https://www.pngall.com/wp-content/uploads/2016/04/Hosting-PNG-Images.png",
+                "alt_text": "inspiration"
               }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "plain_text",
-                "text": "Our Domain is : https://remah.world",
-                "emoji": true
-              }
-            },
-            {
-              "type": "image",
-              "image_url": "https://www.pngall.com/wp-content/uploads/2016/04/Hosting-PNG-Images.png",
-              "alt_text": "inspiration"
-              }
+            ]
+            }
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN}}
