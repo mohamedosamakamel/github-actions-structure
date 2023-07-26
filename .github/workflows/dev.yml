@@ -28,7 +28,7 @@ jobs:
                     "type": "section",
                     "text": {
                         "type": "plain_text",
-                        "text": "${{toJSON(github.event.head_commit.message)}}",
+                        "text": " Commit Message is : ${{ github.event.head_commit.message }}                        ",
                         "emoji": true
                     }
                 },
